@@ -1,4 +1,4 @@
-import { Column, Entity, Index, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, Index, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import { Role } from '../types/userRole.type';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
@@ -8,8 +8,8 @@ import { Reservation } from 'src/reservation/entities/reservation.entity';
     name: 'users',
 })
 export class User {
-    @PrimaryGeneratedColumn()
-    id: number;
+    @PrimaryGeneratedColumn({ unsigned: true })
+    userId: number;
 
     @Column({ type: 'varchar', nullable: false })
     nickname: string;
@@ -26,6 +26,12 @@ export class User {
     @Column({ type: 'enum', enum: Role, default: Role.User })
     role: Role;
 
-    @OneToMany(() => Reservation, (reservation) => reservation.id)
-    reservation: Reservation[];
+    @CreateDateColumn({ name: 'created_at' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ name: 'updated_at' })
+    updatedAt: Date;
+
+    @OneToMany(() => Reservation, (reservation) => reservation.user)
+    reservations: Reservation[];
 }

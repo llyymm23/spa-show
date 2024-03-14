@@ -1,34 +1,34 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-import { Show } from '../../show/entities/show.entity';
 import { User } from '../../user/entities/user.entity';
+import { Schedule } from 'src/show/entities/schedule.entity';
 
 @Entity({
-    name: 'reservation',
+    name: 'reservations',
 })
 export class Reservation {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ unsigned: true })
     reservationId: number;
 
-    @Column()
-    seat: number;
+    @Column({ unsigned: true })
+    userId: number;
 
-    @ManyToOne(() => User, (user) => user.reservation, {
+    @Column({ unsigned: true })
+    scheduleId: number;
+
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @ManyToOne(() => User, (user) => user.reservations, {
         onDelete: 'CASCADE'
     })
     user: User;
 
-    @Column({ type: 'bigint', name: 'userId' })
-    id: number;
-
-    @ManyToOne(() => Show, (show) => show.reservation, {
-        onDelete: 'CASCADE',
+    @ManyToOne(() => Schedule, (schedule) => schedule.reservations, {
+        onDelete: 'CASCADE'
     })
-    show: Show;
-
-    @Column({ type: 'bigint', name: 'showId' })
-    showId: number;
-
-    @CreateDateColumn()
-    createdAt: Date;
+    schedule: Schedule;
 }

@@ -12,6 +12,8 @@ import { Show } from './show/entities/show.entity';
 import { ShowModule } from './show/show.module';
 import { Reservation } from './reservation/entities/reservation.entity';
 import { ReservationModule } from './reservation/reservation.module';
+import { Seat } from './show/entities/seat.entity';
+import { Schedule } from './show/entities/schedule.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -25,7 +27,7 @@ const typeOrmModuleOptions = {
     port: configService.get('DB_PORT'),
     database: configService.get('DB_NAME'),
 
-    entities: [User, Show, Reservation], // 엔티티는 반드시 여기에 명시!
+    entities: [User, Show, Reservation, Seat, Schedule], // 엔티티는 반드시 여기에 명시!
     synchronize: configService.get('DB_SYNC'),
     logging: true,
   }),

@@ -3,6 +3,7 @@ import { UserInfo } from 'src/utils/userInfo.decorator';
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { User } from './entities/user.entity';
 import { UserService } from './user.service';
@@ -13,8 +14,8 @@ export class UserController {
 
     //회원가입
     @Post('register')
-    async register(@Body() loginDto: LoginDto) {
-        return await this.userService.register(loginDto.nickname, loginDto.email, loginDto.password);
+    async register(@Body() registerDto: RegisterDto) {
+        return await this.userService.register(registerDto.role, registerDto.nickname, registerDto.email, registerDto.password, registerDto.passwordconfirm);
     }
 
     //로그인

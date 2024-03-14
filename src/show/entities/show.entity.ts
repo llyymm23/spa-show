@@ -1,41 +1,39 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-import { Reservation } from '../../reservation/entities/reservation.entity'
+import { ShowCategory } from '../types/show-category.type';
+import { Schedule } from './schedule.entity';
 
 @Entity({
     name: 'shows',
 })
 export class Show {
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({ unsigned: true })
     showId: number;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column()
     title: string;
 
-    @Column({ type: 'text', nullable: false })
+    @Column()
     info: string;
 
-    @Column({ type: 'varchar', nullable: false })
-    date: string;
+    @Column({ type: 'enum', enum: ShowCategory })
+    category: ShowCategory;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column()
     address: string;
 
-    @Column({ type: 'int', nullable: false })
-    total_seat: number;
+    @Column()
+    image: string;
 
-    @Column({ type: 'int', nullable: false, default: 0 })
-    current_seat: number;
-
-    // @Column({ type: 'varchar' })
-    // image: string;
-
-    @Column({ type: 'varchar', nullable: false })
-    category: string;
-
-    @Column({ type: 'int', nullable: false })
+    @Column()
     price: number;
 
-    @OneToMany(() => Reservation, (reservation) => reservation.showId)
-    reservation: Reservation[];
+    @CreateDateColumn()
+    createdAt: Date;
+
+    @UpdateDateColumn()
+    updatedAt: Date;
+
+    @OneToMany(() => Schedule, (schedule) => schedule.show, { cascade: true })
+    schedules: Schedule[];
 }

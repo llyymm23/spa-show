@@ -13,9 +13,11 @@ export class ReservationController {
     constructor(private readonly reservationService: ReservationService) { }
 
     //예약 확인하기
-    @Get(':reservationId')
-    async getReservation(@Param('reservationId') reservationId: number) {
-        return await this.reservationService.getReservation(reservationId);
+    @Get()
+    async getReservation(
+        @UserInfo() user: User,
+    ) {
+        return await this.reservationService.getReservation(user.userId);
     }
 
     //공연 예약하기
@@ -25,8 +27,8 @@ export class ReservationController {
         @Body() reservationDto: ReservationDto,
     ) {
         await this.reservationService.reserve(
-            user.id,
-            reservationDto.showId,
+            user.userId,
+            reservationDto.scheduleId,
             reservationDto.seat
         );
     }
@@ -48,6 +50,6 @@ export class ReservationController {
     //예약 취소하기
     @Delete(':reservationId')
     async deleteReservation(@UserInfo() user: User, @Param('reservationId') reservationId: number) {
-        await this.reservationService.deleteReservation(reservationId, user.id)
+        await this.reservationService.deleteReservation(reservationId, user.userId)
     }
 }
