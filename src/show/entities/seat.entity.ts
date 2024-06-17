@@ -1,5 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Schedule } from './schedule.entity';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Show } from './show.entity';
 
 @Entity({
     name: 'seats',
@@ -9,13 +9,16 @@ export class Seat {
     seatId: number;
 
     @Column({ unsigned: true })
-    scheduleId: number;
+    showId: number;
 
     @Column({ unsigned: true })
-    current_seat: number;
+    grade: number;
 
     @Column({ unsigned: true })
-    total_seat: number;
+    price: number;
+
+    @Column({ unsigned: true })
+    seat_num: number;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -23,7 +26,8 @@ export class Seat {
     @UpdateDateColumn()
     updatedAt: Date;
 
-    @OneToOne(() => Schedule, (schedule) => schedule.seat)
-    @JoinColumn()
-    schedule: Schedule;
+    @ManyToOne(() => Show, (show) => show.seats, {
+        onDelete: 'CASCADE'
+    })
+    show: Show;
 }

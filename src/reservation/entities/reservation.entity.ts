@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import { User } from '../../user/entities/user.entity';
-import { Schedule } from 'src/show/entities/schedule.entity';
+import { Show } from 'src/show/entities/show.entity';
 
 @Entity({
     name: 'reservations',
@@ -27,8 +27,8 @@ export class Reservation {
     })
     user: User;
 
-    @ManyToOne(() => Schedule, (schedule) => schedule.reservations, {
+    @ManyToOne(() => Show, (show) => show.reservations, {
         onDelete: 'CASCADE'
     })
-    schedule: Schedule;
+    show: Show;
 }
