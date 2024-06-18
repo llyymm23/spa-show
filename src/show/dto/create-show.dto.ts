@@ -1,5 +1,6 @@
-import { IsDateString, IsEnum, IsMilitaryTime, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsDateString, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ShowCategory } from '../types/show-category.type';
+import { Grade } from '../types/seat.type';
 
 export class CreateShowDto {
     @IsString()
@@ -10,6 +11,30 @@ export class CreateShowDto {
     @IsNotEmpty({ message: '공연의 설명을 입력해주세요.' })
     info: string;
 
+    @IsString()
+    // @ApiProperty({
+    //     example: '2024-06-18T20:00:00',
+    //     description: '예매 시작',
+    // })
+    @IsNotEmpty({ message: '예매 시작 날짜를 입력해주세요.' })
+    reservationStart: string;
+
+    @IsString()
+    // @ApiProperty({
+    //     example: '2024-06-18T20:00:00',
+    //     description: '예매 마감',
+    // })
+    @IsNotEmpty({ message: '예매 마감 날짜를 입력해주세요.' })
+    reservationEnd: string;
+
+    @IsDateString()
+    @IsNotEmpty({ message: '공연 날짜와 시간을 입력해주세요.' })
+    // @ApiProperty({
+    //     example: '2024-06-18T19:00:00',
+    //     description: '공연 날짜와 시간 (ISO 8601 형식)',
+    // })
+    date: Date;
+
     @IsEnum(ShowCategory)
     @IsNotEmpty({ message: '공연의 카테고리를 입력해주세요.' })
     category: ShowCategory;
@@ -18,23 +43,28 @@ export class CreateShowDto {
     @IsNotEmpty({ message: '공연의 주소를 입력해주세요.' })
     address: string;
 
-    @IsNumber()
-    @IsNotEmpty({ message: '공연의 가격을 입력해주세요.' })
-    price: number;
+    @IsArray()
+    @IsString({ each: true })
+    @IsNotEmpty({ message: '좌석 등급을 기입해주세요.' })
+    grade: Grade[];
 
-    @IsString()
-    @IsNotEmpty({ message: '공연의 이미지를 입력해 주세요.' })
-    image: string;
+    @IsArray()
+    @IsNumber({}, { each: true })
+    // @ApiProperty({
+    //     example: [20000, 100000],
+    //     description: '좌석 등급별 가격',
+    //     type: 'array',
+    // })
+    @IsNotEmpty({ message: '등급별 가격을 입력해주세요.' })
+    price: number[];
 
-    @IsDateString()
-    @IsNotEmpty({ message: '공연 날짜를 입력해주세요.' })
-    date: Date;
-
-    @IsMilitaryTime()
-    @IsNotEmpty({ message: '공연 시간을 입력해 주세요.' })
-    time: string;
-
-    @IsNumber()
-    @IsNotEmpty({ message: '공연의 좌석수를 입력해주세요.' })
-    total_seat: number;
+    @IsArray()
+    @IsNumber({}, { each: true })
+    // @ApiProperty({
+    //     example: [10, 20],
+    //     description: '등급별 좌석 수',
+    //     type: 'array',
+    // })
+    @IsNotEmpty({ message: '등급별 좌석수를 입력해주세요.' })
+    seat: number[];
 }
