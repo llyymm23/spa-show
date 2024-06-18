@@ -1,7 +1,6 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import { ShowCategory } from '../types/show-category.type';
-import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { Seat } from './seat.entity';
 
 @Entity({
@@ -37,9 +36,6 @@ export class Show {
 
     @UpdateDateColumn()
     updatedAt: Date;
-
-    @OneToMany(() => Reservation, (reservation) => reservation.show)
-    reservations: Reservation[];
 
     @OneToMany(() => Seat, (seat) => seat.show)
     seats: Seat[];

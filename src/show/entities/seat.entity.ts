@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Show } from './show.entity';
+import { Reservation } from 'src/reservation/entities/reservation.entity';
 
 @Entity({
     name: 'seats',
@@ -30,4 +31,8 @@ export class Seat {
         onDelete: 'CASCADE'
     })
     show: Show;
+
+    @OneToOne(() => Reservation, reservation => reservation.seat)
+    @JoinColumn()
+    reservation: Reservation;
 }

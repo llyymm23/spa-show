@@ -1,7 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 import { User } from '../../user/entities/user.entity';
-import { Show } from 'src/show/entities/show.entity';
+import { Seat } from 'src/show/entities/seat.entity';
 
 @Entity({
     name: 'reservations',
@@ -14,7 +14,10 @@ export class Reservation {
     userId: number;
 
     @Column({ unsigned: true })
-    scheduleId: number;
+    seatId: number;
+
+    @Column({ unsigned: true })
+    showId: number;
 
     @CreateDateColumn()
     createdAt: Date;
@@ -27,8 +30,9 @@ export class Reservation {
     })
     user: User;
 
-    @ManyToOne(() => Show, (show) => show.reservations, {
+    @OneToOne(() => Seat, (seat) => seat.reservation, {
         onDelete: 'CASCADE'
     })
-    show: Show;
+    @JoinColumn()
+    seat: Seat;
 }
