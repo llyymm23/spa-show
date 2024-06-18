@@ -1,6 +1,6 @@
 import { UserInfo } from 'src/utils/userInfo.decorator';
 
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { RegisterDto } from './dto/register.dto';
@@ -15,20 +15,33 @@ export class UserController {
     //회원가입
     @Post('register')
     async register(@Body() registerDto: RegisterDto) {
-        return await this.userService.register(registerDto.role, registerDto.nickname, registerDto.email, registerDto.password, registerDto.passwordconfirm);
+        const user = await this.userService.register(registerDto);
+        return {
+            statusCode: HttpStatus.OK,
+            message: `회원가입에 성공했습니다.`,
+            user,
+        }
     }
 
     //로그인
     @Post('login')
     async login(@Body() loginDto: LoginDto) {
-        return await this.userService.login(loginDto.email, loginDto.password);
+        const token = await this.userService.login(loginDto);
+        return {
+            statusCode: HttpStatus.OK,
+            message: `로그인에 성공했습니다.`,
+            token,
+        }
     }
 
     //프로필 조회
     @UseGuards(AuthGuard('jwt'))
     @Get('profile')
-    getEmail(@UserInfo() user: User) {
+    async profile(@UserInfo() user: User) {
+        const profile = await this.userService.profile(user.userId)
         return {
+            statusCode: HttpStatus.OK,
+            message: `내 프로필 조회에 성공했습니다.`,
             nickname: user.nickname,
             point: user.point
         };

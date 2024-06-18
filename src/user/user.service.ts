@@ -7,7 +7,8 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { User } from './entities/user.entity';
-import { Role } from './types/userRole.type';
+import { RegisterDto } from './dto/register.dto';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class UserService {
@@ -17,10 +18,10 @@ export class UserService {
         private readonly jwtService: JwtService,
     ) { }
 
-    async register(role: Role, nickname: string, email: string, password: string, passwordconfirm: string) {
-        const existingUser = await this.findByEmail(email);
+    async register(registerDto: RegisterDto) {
+        const existingUser = await this.userRepository.findOneBy({ email: registerDto.email });
 
-        if (password !== passwordconfirm) {
+        if (registerDto.password !== registerDto.passwordconfirm) {
             throw new BadRequestException('비밀번호가 일치하지 않습니다.')
         }
 
@@ -30,40 +31,41 @@ export class UserService {
             );
         }
 
-        const hashedPassword = await hash(password, 10);
-        await this.userRepository.save({
-            role,
-            nickname,
-            email,
+        const hashedPassword = await hash(registerDto.password, 10);
+
+        const user = await this.userRepository.save({
+            role: registerDto.role,
+            nickname: registerDto.nickname,
+            email: registerDto.email,
             password: hashedPassword,
             point: 1000000
         });
+
+        return user;
     }
 
-    async login(email: string, password: string) {
+    async login(loginDto: LoginDto) {
         const user = await this.userRepository.findOne({
             select: ['userId', 'email', 'password'],
-            where: { email },
+            where: { email: loginDto.email },
         });
+
         if (_.isNil(user)) {
             throw new UnauthorizedException('이메일을 확인해주세요.');
         }
 
-        if (!(await compare(password, user.password))) {
+        if (!(await compare(loginDto.password, user.password))) {
             throw new UnauthorizedException('비밀번호를 확인해주세요.');
         }
 
-        const payload = { email, sub: user.userId };
+        const payload = { email: loginDto.email, sub: user.userId };
+
         return {
             access_token: this.jwtService.sign(payload),
         };
     }
 
-    async findByEmail(email: string) {
-        return await this.userRepository.findOneBy({ email });
-    }
-
-    async findById(userId: number) {
-        return await this.userRepository.findOneBy({ userId });
+    async profile(userId: number) {
+        const user = await this.userRepository.findOneBy({ userId });
     }
 }
