@@ -6,13 +6,12 @@ import { ReservationController } from './reservation.controller';
 import { ReservationService } from './reservation.service';
 
 import { User } from 'src/user/entities/user.entity';
-import { Schedule } from 'src/show/entities/schedule.entity';
 import { Seat } from 'src/show/entities/seat.entity';
 import { Show } from 'src/show/entities/show.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Reservation, User, Seat, Schedule, Show]),
+    TypeOrmModule.forFeature([Reservation, User, Seat, Show]),
   ],
   providers: [ReservationService],
   controllers: [ReservationController],

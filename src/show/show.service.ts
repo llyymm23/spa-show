@@ -13,7 +13,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Show } from './entities/show.entity';
 import { SearchShowDTO } from './dto/search-show.dto';
 import { CreateShowDto } from './dto/create-show.dto';
-import { Schedule } from './entities/schedule.entity';
 import { Seat } from './entities/seat.entity';
 import { FindAllShowDto } from './dto/find-all-show.dto';
 
@@ -22,7 +21,6 @@ export class ShowService {
     constructor(
         @InjectRepository(Show) private readonly showRepository: Repository<Show>,
         @InjectRepository(Seat) private readonly seatRepository: Repository<Seat>,
-        @InjectRepository(Schedule) private readonly scheduleRepository: Repository<Schedule>,
     ) { }
 
     //새 공연 등록하기

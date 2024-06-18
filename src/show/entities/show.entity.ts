@@ -31,6 +31,12 @@ export class Show {
     @Column({ type: 'varchar', nullable: false })
     image: string;
 
+    @Column({ type: 'varchar', nullable: false })
+    reservationStart: string;
+
+    @Column({ type: 'varchar', nullable: false })
+    reservationEnd: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

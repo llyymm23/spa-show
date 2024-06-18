@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Reservation } from './entities/reservation.entity';
 import { User } from 'src/user/entities/user.entity';
 import { Seat } from 'src/show/entities/seat.entity';
-import { Schedule } from 'src/show/entities/schedule.entity';
 import { Show } from 'src/show/entities/show.entity';
 
 @Injectable()
@@ -16,7 +15,6 @@ export class ReservationService {
         @InjectRepository(Reservation) private readonly reservationRepository: Repository<Reservation>,
         @InjectRepository(User) private readonly userRepository: Repository<User>,
         @InjectRepository(Seat) private readonly seatRepository: Repository<Seat>,
-        @InjectRepository(Schedule) private readonly scheduleRepository: Repository<Schedule>,
         @InjectRepository(Show) private readonly showRepository: Repository<Show>,
     ) { }
 
