@@ -34,7 +34,7 @@ export class UserController {
         }
     }
 
-    //프로필 조회
+    //프로필 조회(닉네임, 포인트, 예약 내역)
     @UseGuards(AuthGuard('jwt'))
     @Get('profile')
     async profile(@UserInfo() user: User) {
@@ -43,7 +43,8 @@ export class UserController {
             statusCode: HttpStatus.OK,
             message: `내 프로필 조회에 성공했습니다.`,
             nickname: user.nickname,
-            point: user.point
+            point: user.point,
+            reservation: profile,
         };
     }
 }

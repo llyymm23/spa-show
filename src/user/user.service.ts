@@ -9,12 +9,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { Reservation } from 'src/reservation/entities/reservation.entity';
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(User)
-        private userRepository: Repository<User>,
+        @InjectRepository(User) private userRepository: Repository<User>,
+        @InjectRepository(Reservation) private reservationRepository: Repository<Reservation>,
         private readonly jwtService: JwtService,
     ) { }
 
@@ -66,6 +67,8 @@ export class UserService {
     }
 
     async profile(userId: number) {
-        const user = await this.userRepository.findOneBy({ userId });
+        const reservation = await this.reservationRepository.find({ where: { userId } });
+
+        return reservation;
     }
 }
