@@ -17,6 +17,12 @@ export class Show {
     @Column({ type: 'text', nullable: false })
     info: string;
 
+    @Column({ type: 'date', nullable: false }) // 'YYYY-MM-DD' 
+    date: string;
+
+    @Column({ type: 'time', nullable: false }) // 'HH:MM:SS' 
+    time: string;
+
     @Column({ type: 'enum', enum: ShowCategory })
     category: ShowCategory;
 
@@ -25,9 +31,6 @@ export class Show {
 
     @Column({ type: 'varchar', nullable: false })
     image: string;
-
-    @Column({ type: 'varchar', nullable: false })
-    price: number;
 
     @CreateDateColumn()
     createdAt: Date;
