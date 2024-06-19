@@ -1,6 +1,6 @@
 import { User } from 'src/user/entities/user.entity';
 
-import { Body, Controller, Delete, Get, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { UserInfo } from '../utils/userInfo.decorator';
@@ -10,7 +10,20 @@ import { ReservationService } from './reservation.service';
 @UseGuards(AuthGuard('jwt'))
 @Controller('reservation')
 export class ReservationController {
-    constructor(private readonly reservationService: ReservationService) { }
+    constructor(
+        private readonly reservationService: ReservationService
+    ) { }
+
+    //공연 예약하기
+    @Post()
+    async reserve(@UserInfo() user: User, @Body() reservationDto: ReservationDto) {
+        const show = await this.reservationService.reserve(user.userId, reservationDto);
+        return {
+            statusCode: HttpStatus.OK,
+            message: `공연 예약에 성공하였습니다.`,
+            show,
+        }
+    }
 
     //예약 확인하기
     @Get()
@@ -18,19 +31,6 @@ export class ReservationController {
         @UserInfo() user: User,
     ) {
         return await this.reservationService.getReservation(user.userId);
-    }
-
-    //공연 예약하기
-    @Post()
-    async reserve(
-        @UserInfo() user: User,
-        @Body() reservationDto: ReservationDto,
-    ) {
-        await this.reservationService.reserve(
-            user.userId,
-            reservationDto.scheduleId,
-            reservationDto.seat
-        );
     }
 
     // //예약 수정하기
