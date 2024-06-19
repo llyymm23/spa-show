@@ -16,10 +16,10 @@ export class Show {
     @Column({ type: 'text', nullable: false })
     info: string;
 
-    @Column({ type: 'date', nullable: false }) // 'YYYY-MM-DD' 
+    @Column({ type: 'date', nullable: false })
     date: string;
 
-    @Column({ type: 'time', nullable: false }) // 'HH:MM:SS' 
+    @Column({ type: 'time', nullable: false })
     time: string;
 
     @Column({ type: 'enum', enum: ShowCategory })

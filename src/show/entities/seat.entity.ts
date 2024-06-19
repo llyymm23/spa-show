@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { Show } from './show.entity';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
+import { Grade } from '../types/seat.type';
 
 @Entity({
     name: 'seats',
@@ -13,13 +14,13 @@ export class Seat {
     showId: number;
 
     @Column({ unsigned: true })
-    grade: number;
+    grade: Grade;
 
     @Column({ unsigned: true })
     price: number;
 
     @Column({ unsigned: true })
-    seat_num: number;
+    seatNum: number;
 
     @CreateDateColumn()
     createdAt: Date;
