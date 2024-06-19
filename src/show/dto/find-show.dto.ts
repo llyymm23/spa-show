@@ -1,7 +1,7 @@
 import { IsEnum, IsOptional, IsString } from "class-validator";
 import { ShowCategory } from "../types/show-category.type";
 
-export class FindAllShowDto {
+export class FindShowDto {
     @IsOptional()
     @IsString()
     keyword?: string;
@@ -9,4 +9,8 @@ export class FindAllShowDto {
     @IsOptional()
     @IsEnum(ShowCategory)
     category?: ShowCategory;
+
+    @IsOptional()
+    @IsString()
+    title?: string
 }
