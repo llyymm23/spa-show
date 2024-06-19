@@ -20,7 +20,7 @@ export class ReservationService {
         @InjectRepository(Show) private readonly showRepository: Repository<Show>,
     ) { }
 
-    //예약하기
+    //예매하기
     async reserve(userId: number, reservationDto: ReservationDto) {
         const user = await this.userRepository.findOneBy({ userId });
         const show = await this.showRepository.findOne({ where: { showId: reservationDto.showId } })
@@ -86,54 +86,41 @@ export class ReservationService {
     }
 
 
-    //예약 확인하기
+    //예매 확인하기
     async getReservation(userId: number) {
-        return await this.reservationRepository.find({
+        const reservation = await this.reservationRepository.find({
             order: { createdAt: 'ASC' },
             where: { userId },
         })
+
+        return reservation;
     }
 
-    // //예약 수정하기
-    // async updateReservation(id: number, userId: number, message: string) {
-    //     await this.verifyMessage(id, userId);
-    //     await this.reservationRepository.update({ id }, { message });
-    // }
-
-    //예약 취소하기(포인트 환불)
+    //예매 취소하기(포인트 환불)
     async deleteReservation(reservationId: number, userId: number) {
         const reservation = await this.reservationRepository.findOneBy({ reservationId });
-
-        const scheduleId = reservation.scheduleId;
-
-        const schedule = await this.scheduleRepository.findOneBy({ scheduleId });
-
-
-        const showId = schedule.showId;
-
-        console.log("showId");
-        console.log(showId);
-
-        const show = await this.showRepository.findOneBy({ showId });
-
         const user = await this.userRepository.findOneBy({ userId });
-
-        console.log(show);
-        console.log(user);
+        const seat = await this.seatRepository.findOneBy({ seatId: reservation.seatId });
 
         if (_.isNil(reservation)) {
-            throw new NotFoundException('해당 예약 내역이 없습니다.')
+            throw new NotFoundException('해당 예매 내역이 없습니다.')
         }
 
-        if (user.userId !== userId) {
-            throw new NotFoundException('예약을 취소할 권한이 없습니다.');
+        //본인이 예매한 공연이 아닐 때
+        if (reservation.userId !== userId) {
+            throw new NotFoundException('예매을 취소할 권한이 없습니다.');
         }
 
-        //예약 취소하기
+        //예약 취소하기(좌석도 빈 자리로 변경)
         await this.reservationRepository.delete({ reservationId });
-        //포인트 환불
-        await this.userRepository.save({ userId, point: user.point + show.price })
+        await this.seatRepository.save({
+            where: { seatId: reservation.seatId },
+            seatStatus: seatStatus.empty
+        })
 
-        return show;
+        //포인트 환불
+        await this.userRepository.save({ userId, point: user.point + seat.price })
+
+        return reservation;
     }
 }

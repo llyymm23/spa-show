@@ -14,42 +14,36 @@ export class ReservationController {
         private readonly reservationService: ReservationService
     ) { }
 
-    //공연 예약하기
+    //공연 예매하기
     @Post()
     async reserve(@UserInfo() user: User, @Body() reservationDto: ReservationDto) {
         const show = await this.reservationService.reserve(user.userId, reservationDto);
         return {
             statusCode: HttpStatus.OK,
-            message: `공연 예약에 성공하였습니다.`,
+            message: `공연 예매에 성공하였습니다.`,
             show,
         }
     }
 
-    //예약 확인하기
+    //예매 확인하기
     @Get()
-    async getReservation(
-        @UserInfo() user: User,
-    ) {
-        return await this.reservationService.getReservation(user.userId);
+    async getReservation(@UserInfo() user: User) {
+        const reservation = await this.reservationService.getReservation(user.userId);
+        return {
+            statusCode: HttpStatus.OK,
+            message: `공연 예매 확인에 성공하였습니다.`,
+            reservation,
+        }
     }
 
-    // //예약 수정하기
-    // @Patch(':id')
-    // async updateReservation(
-    //     @UserInfo() user: User,
-    //     @Param('id') id: number,
-    //     @Body() reservationDto: ReservationDto,
-    // ) {
-    //     await this.reservationService.updateReservation(
-    //         id,
-    //         user.id,
-    //         reservationDto.message,
-    //     );
-    // }
-
-    //예약 취소하기
+    //예매 취소하기
     @Delete(':reservationId')
     async deleteReservation(@UserInfo() user: User, @Param('reservationId') reservationId: number) {
-        await this.reservationService.deleteReservation(reservationId, user.userId)
+        const reservation = await this.reservationService.deleteReservation(reservationId, user.userId)
+        return {
+            statusCode: HttpStatus.OK,
+            message: `예매를 취소하였습니다.`,
+            reservation,
+        }
     }
 }
