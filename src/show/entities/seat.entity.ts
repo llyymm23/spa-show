@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, One
 import { Show } from './show.entity';
 import { Reservation } from 'src/reservation/entities/reservation.entity';
 import { Grade } from '../types/seat.type';
+import { seatStatus } from '../types/seatStatus.type';
 
 @Entity({
     name: 'seats',
@@ -21,6 +22,9 @@ export class Seat {
 
     @Column({ unsigned: true })
     seatNum: number;
+
+    @Column({ unsigned: true, default: seatStatus.empty })
+    seatStatus: seatStatus;
 
     @CreateDateColumn()
     createdAt: Date;
