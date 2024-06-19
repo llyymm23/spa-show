@@ -12,6 +12,10 @@ export class CreateShowDto {
     info: string;
 
     @IsString()
+    @IsNotEmpty({ message: '공연의 사진을 입력해주세요.' })
+    image: string;
+
+    @IsString()
     // @ApiProperty({
     //     example: '2024-06-18T20:00:00',
     //     description: '예매 시작',
