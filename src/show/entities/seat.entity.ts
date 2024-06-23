@@ -14,7 +14,7 @@ export class Seat {
     @Column({ unsigned: true })
     showId: number;
 
-    @Column({ unsigned: true })
+    @Column({})
     grade: Grade;
 
     @Column({ unsigned: true })
@@ -23,7 +23,7 @@ export class Seat {
     @Column({ unsigned: true })
     seatNum: number;
 
-    @Column({ unsigned: true, default: seatStatus.empty })
+    @Column({ default: seatStatus.empty })
     seatStatus: seatStatus;
 
     @CreateDateColumn()
