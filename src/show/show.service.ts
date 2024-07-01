@@ -68,14 +68,14 @@ export class ShowService {
         return show;
     }
 
-    //공연 검색하기(키워드,카테고리,이름 검색)
+    //공연 검색하기(키워드,카테고리 검색) - 키워드 검색이 이름 검색과 같음
     async findShow(findShowDto: FindShowDto) {
-        const { keyword, category, title } = findShowDto;
+        const { keyword, category } = findShowDto;
         const shows = await this.showRepository.find({
-            where: { ...(keyword && { title: Like(`%${keyword}%`) }), ...(category && { category }), ...(title && { title }) },
+            where: { ...(keyword && { title: Like(`%${keyword}%`) }), ...(category && { category }) },
         });
 
-        if (!shows) {
+        if (_.isNil(shows)) {
             throw new NotFoundException('해당하는 공연이 존재하지 않습니다.');
         }
 
