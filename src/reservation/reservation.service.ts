@@ -57,7 +57,8 @@ export class ReservationService {
         }
 
         //해당 좌석이 이미 예매된 좌석인지 확인
-        if (seat.seatStatus = seatStatus.full) {
+        if (seat.seatStatus === seatStatus.full) {
+            console.log("seat.seatStatus : ", seat.seatStatus);
             throw new BadRequestException('이미 예매된 좌석입니다.');
         }
 

@@ -11,7 +11,7 @@ export class User {
     @PrimaryGeneratedColumn({ unsigned: true })
     userId: number;
 
-    @Column({ type: 'varchar', nullable: false })
+    @Column({ type: 'varchar', nullable: false, default: "닉네임을 설정해주세요." })
     nickname: string;
 
     @Column({ type: 'varchar', unique: true, nullable: false })
